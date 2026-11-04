@@ -14,7 +14,7 @@ where each decision lives in the code, what gets added, changed or removed. You 
 calls. The agent writes the code. Your architecture stays yours.
 
 ```bash
-npx skills add <owner>/specshape        # then, in your agent:
+npx skills add mohamedwaleed/specshape        # then, in your agent:
 /specshape-plan PROJ-123
 ```
 
@@ -192,13 +192,13 @@ step.)
 **Skills CLI**, for any agent it supports:
 
 ```bash
-npx skills add <owner>/specshape
+npx skills add mohamedwaleed/specshape
 ```
 
 **Claude Code plugin:**
 
 ```
-/plugin marketplace add <owner>/specshape
+/plugin marketplace add mohamedwaleed/specshape
 /plugin install specshape
 ```
 
@@ -206,7 +206,7 @@ npx skills add <owner>/specshape
 symlink, `git pull` updates it.
 
 ```bash
-git clone https://github.com/<owner>/specshape.git ~/specshape
+git clone https://github.com/mohamedwaleed/specshape.git ~/specshape
 ln -s ~/specshape/skills/specshape-plan ~/.claude/skills/specshape-plan   # use your agent's skills folder
 ```
 

@@ -1,12 +1,13 @@
 # Plan format
 
-One file per piece of work: `.previz/<id>.md`. Use only the sections the size calls for. Write
+One file per piece of work: `.specshape/<id>.md`. Use only the sections the size calls for. Write
 `n/a: <reason>` for a section that's required but doesn't apply.
 
 ## Frontmatter
 
 ```yaml
 ---
+specshape: 0.1                  # plan format version (D24)
 id: PROJ-500                 # ticket key or kebab-case slug
 title: Multi-currency billing
 source: <ticket URL, spec path, or "conversation">
@@ -85,7 +86,7 @@ tracker: PROJ-500            # the epic, once tickets exist
 
 ## A story once it's planned
 
-`/previz-plan <story>` fills in the story under **Stories**:
+`/specshape-plan <story>` fills in the story under **Stories**:
 
 ```markdown
 ### PROJ-501 Money type + schema — planned
@@ -104,9 +105,9 @@ Workflow status (in progress, done) lives in the tracker, not here.
 
 ## Written by other commands
 
-`/previz-plan` leaves these alone:
+`/specshape-plan` leaves these alone:
 
-- **checkpoint lines**, added by `/previz-build` to a task:
+- **checkpoint lines**, added by `/specshape-build` to a task:
   `✅ T1 Money value type — commit a1b2c3, money.test.ts 6/6, no deviations`
-- **check results**, added by `/previz-check` under a plan or story:
+- **check results**, added by `/specshape-check` under a plan or story:
   `Check (2026-11-04): passed, 0 drift`

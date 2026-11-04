@@ -1,31 +1,32 @@
 ---
-name: previz-plan
-description: Plan a change before any code is written. Sizes the work, asks only the questions the code can't answer, and writes one code-grounded plan (decisions, change map, tasks or stories) to .previz/<id>.md, revising it until the user approves. Never writes code. Use when the user wants to plan a ticket, spec, feature or new project, plan one story of an existing plan, or revise a plan.
+name: specshape-plan
+description: Plan a change before any code is written. Sizes the work, asks only the questions the code can't answer, and writes one code-grounded plan (decisions, change map, tasks or stories) to .specshape/<id>.md, revising it until the user approves. Never writes code. Use when the user wants to plan a ticket, spec, feature or new project, plan one story of an existing plan, or revise a plan.
 ---
 
-# previz-plan
+# specshape-plan
 
-Show the change before making it, and keep every decision.
+Code review, before the code exists: show the shape of a change while it's a sketch, and keep
+every decision.
 
-You write a **plan**: a coarse, code-grounded picture of a piece of work, saved to `.previz/<id>.md`.
+You write a **plan**: a coarse, code-grounded picture of a piece of work, saved to `.specshape/<id>.md`.
 The user reviews it, steers it, and approves it. Code is written later, one task at a time, by
-`/previz-build`. This skill never writes code.
+`/specshape-build`. This skill never writes code.
 
 ## What you may change
 
-- Files under `.previz/`: the plan, and `.previz/context.md` on approval.
+- Files under `.specshape/`: the plan, and `.specshape/context.md` on approval.
 - With the user's explicit yes, and only on approval: tickets in their tracker, and one line in the
   repo's `AGENTS.md`.
 
 Nothing else. No source files, branches, commits, ticket comments, or commands that change state.
-If the user asks you to implement, point them to `/previz-build <id> <task>`.
+If the user asks you to implement, point them to `/specshape-build <id> <task>`.
 
 ## 0. Orient
 
-1. **Read the context.** Read `.previz/context.md` if it exists, plus any glossary it links to.
+1. **Read the context.** Read `.specshape/context.md` if it exists, plus any glossary it links to.
    Its glossary, contracts and rules apply to everything you write. Read `AGENTS.md` and the
    project's own conventions (`CLAUDE.md`, `CONTEXT.md`, ADRs, contributing guides).
-2. **Work out what the input is.** Check existing plans in `.previz/` first:
+2. **Work out what the input is.** Check existing plans in `.specshape/` first:
    - **an existing plan id** → revise that plan (see [Revising](#revising-a-plan))
    - **a story id inside an existing plan** → plan that story (see [Planning a story](#planning-a-story))
    - **a ticket key or URL, a spec file, or free text** → new work
@@ -94,7 +95,7 @@ Format every question like this, and wait for the answers:
 
 ## 5. Write the plan
 
-Write `.previz/<id>.md` in the format in [plan-format.md](plan-format.md). What the plan contains
+Write `.specshape/<id>.md` in the format in [plan-format.md](plan-format.md). What the plan contains
 depends on the size:
 
 | Size | Contains |
@@ -158,7 +159,7 @@ On feedback:
 ## 7. On approval
 
 1. Set `status: approved` and `approved: <date>`, and refresh `base_commit`.
-2. **Apply the Context changes** to `.previz/context.md`, creating it if needed. If the repo already
+2. **Apply the Context changes** to `.specshape/context.md`, creating it if needed. If the repo already
    has a glossary, link to it and add only what's missing. Then empty the plan's Context changes
    section.
 3. **Initiative or Project: offer the tickets.** List the tickets you'll create: one per story, as
@@ -167,11 +168,11 @@ On feedback:
    user says yes, using whatever tracker access you have. Replace each local story id with its
    ticket key in the plan. If you have no tracker access, say so and keep the local ids.
 4. **First plan in this repo:** offer to add one line to `AGENTS.md`, and add it only after a yes:
-   "Read `.previz/context.md` before working on this code. Plans live in `.previz/`; for planned
-   work, use `/previz-build`."
+   "Read `.specshape/context.md` before working on this code. Plans live in `.specshape/`; for planned
+   work, use `/specshape-build`."
 5. Say what comes next:
-   - Change or Feature: `/previz-build <id> T1`
-   - Initiative or Project: `/previz-plan <first story id>`
+   - Change or Feature: `/specshape-build <id> T1`
+   - Initiative or Project: `/specshape-plan <first story id>`
 
 ## Planning a story
 

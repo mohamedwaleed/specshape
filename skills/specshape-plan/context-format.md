@@ -1,6 +1,6 @@
 # Context format
 
-`.previz/context.md` is what every agent reads before working on the code. It holds three things
+`.specshape/context.md` is what every agent reads before working on the code. It holds three things
 that are true across the whole project. Create it only when a plan has something to put in it, and
 change it only by applying an approved plan's **Context changes**.
 

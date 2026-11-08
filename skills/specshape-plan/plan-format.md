@@ -94,8 +94,10 @@ a failed `HEAD` lookup alone does not establish which it is. Never invent a hash
 Follow [testing.md](testing.md): each behavior task owns its tests and implementation, with a
 public test boundary, expected outcomes and verification command. Do not split tests into a
 later task. Done-checks must cover the task's behavior, not only unchanged behavior. Cite existing
-tests you build on, and label future checks as proposed until run. Routine documentation or validation choices need no decision entry unless a real trade-off
-needs review; use `—` in the task's Decisions column when none applies.
+tests you build on, and label future checks as proposed until run. Routine documentation or
+validation choices need no decision entry unless a real trade-off needs review; use `—` in the
+task's Decisions column when none applies. Include existing usage documentation for changed
+public interfaces in the change map and tasks. Do not classify it as unrelated cleanup.
 
 For Change and Feature reviews, show the complete plan body above, including the sketches and
 task checks. Do not replace them with a prose summary or a link.

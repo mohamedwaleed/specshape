@@ -120,17 +120,19 @@ Rules:
 - **Decisions.** Include choices with meaningful alternatives affecting design or behavior.
   Handle routine work (documenting a flag, following established validation conventions) directly
   in the shape or tasks, unless it has a material trade-off. Standard parser validation does
-  not need a decision merely because custom validation is possible. Number decisions D1, D2 … across the
-  whole plan, stories included. Each has the options, your recommendation, and a consequence
-  the user cares about ("the default is `true`, so ad-hoc runs with `groupBy` now fail"). Status: `open` until answered; `decided` when the user
-  chose; `assumed` when the user approved without commenting on it.
+  not need a decision merely because custom validation is possible. Routine work stays in scope:
+  update existing usage documentation for changed public interfaces; exclude unrelated cleanup.
+  Number decisions D1, D2 … across the whole plan, stories included. Each has the options, your
+  recommendation, and a consequence the user cares about ("the default is `true`, so ad-hoc runs
+  with `groupBy` now fail"). Status: `open` until answered; `decided` when the user chose;
+  `assumed` when the user approved without commenting on it.
 - **Tasks.** Each task leaves the build and the tests green, and names its files, the decisions it
   carries out, the tasks it needs, and a **done-check** that exercises its added or changed behavior.
   Keep behavior and its tests in the same task; never defer verification to a later task.
   Use [testing.md](testing.md) to plan red–green–refactor slices, their public test boundaries,
   outcomes and commands. An unchanged green suite alone does not prove new behavior.
-- **Risks.** Prioritize acceptance criteria and evidence. Do not turn an incidental implementation
-  preference into a new requirement.
+- **Risks.** Name the observable failure and evidence for its impact. A citation showing execution
+  order does not make that order required; explain relevant side effects if order matters.
 - **Stories.** Each is independently shippable as its own ticket and merge request, with a goal and
   acceptance criteria. Story ids are `<id>.<n>` until tickets exist. Never reuse a number.
 - **Use the glossary's words**, and none of the words it says not to use.
@@ -143,6 +145,7 @@ Rules:
 - [ ] every file in the change map has a task, and every task's files are in the change map
 - [ ] every decision has meaningful alternatives, a recommendation and a consequence
 - [ ] every claim about existing code has a `path:line` or an `assumption:` label
+- [ ] every selected contract has verification, including permissive defaults or fallbacks
 - [ ] every behavior task includes its tests, public test boundary and red–green–refactor checks;
   every story has a goal and acceptance criteria
 - [ ] no glossary term, contract or rule in the context is contradicted
@@ -188,6 +191,8 @@ On feedback:
    - Change or Feature: `/specshape-build <id> T1` if that skill is available. Otherwise say the
      plan is ready for implementation but `/specshape-build` is unavailable. Stop without writing code.
    - Initiative or Project: `/specshape-plan <first story id>`
+   Keep the handoff faithful to the saved task definitions and done-checks. Do not append new
+   manual checks or requirements; revise and review the plan first if another check is needed.
 
 ## Planning a story
 

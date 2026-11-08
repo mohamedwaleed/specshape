@@ -9,7 +9,9 @@ planning; those are source changes. Describe outcomes and boundaries, not full t
   test boundaries and cite the tests being extended. Test behavior rather than private structure.
 - **Outcomes:** concrete examples derived from acceptance criteria, including relevant failures
   and compatibility guarantees. Specify invalid-input behavior at every public boundary affected;
-  upstream validation does not protect independent callers.
+  upstream validation does not protect independent callers. Permissive contracts need tests too:
+  if unknown input falls back to a default, verify that fallback instead of calling it untestable
+  or saying there is nothing new to test.
 - **Files and command:** tests and implementation belong in the same task. Name the command and
   what it must prove. Plan approval confirms these boundaries and outcomes for later build.
 

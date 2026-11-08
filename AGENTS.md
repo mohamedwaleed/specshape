@@ -29,7 +29,7 @@ skills/<command>/*.md       reference files the skill loads when needed
 
 | Command | State |
 |---------|-------|
-| `/specshape-plan` | Written. Two manual fixture runs reviewed; real-ticket trials pending |
+| `/specshape-plan` | Written. Three manual fixture runs reviewed; real-ticket trials pending |
 | `/specshape-build` | Designed (D4, D5, D13, D14), not written |
 | `/specshape-check` | Designed (D12, D20), not written |
 | `/specshape` (status) | Designed (D3), not written |

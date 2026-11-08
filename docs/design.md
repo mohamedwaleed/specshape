@@ -188,6 +188,8 @@ with meaningful alternatives affecting design or behavior; routine documentation
 validation conventions belong in the plan without a separate approval question. Using a parser's
 standard validation is routine unless error wording or validation ownership has a material
 trade-off. Recommend it directly rather than inventing an alternative just to fill a decision.
+Routine supporting work still belongs in scope: document a changed public interface in the
+existing usage documentation without asking whether to do so. Exclude unrelated cleanup.
 
 **Why:** the first manual status-filter run asked the user whether to document a new flag,
 adding ceremony without a useful design choice.
@@ -307,19 +309,27 @@ Do not create a commit to fill the field.
 ### P9 Available next steps
 Recommend `/specshape-build` only when it is available to the agent. Otherwise explain that
 building is the next stage but that command is unavailable; leave the approved plan ready for
-later implementation without writing code. The first-run `AGENTS.md` offer must likewise avoid
+later implementation without writing code. Closing summaries must match the saved plan's tasks
+and checks; do not add a manual check or requirement in the handoff. If a new check is needed,
+revise and review the plan before approval. The first-run `AGENTS.md` offer must likewise avoid
 directing agents to an unavailable command.
 
 **Why:** the first manual run directed the user to a command that has not been written yet.
+A later run also added a manual verification in its closing summary that the task did not specify.
 
 ### P10 Risks and interface boundaries
 Rank risks by acceptance criteria and evidence, not incidental implementation preferences. Do not
 turn an implementation choice (such as validating before object construction) into a requirement
-unless the request or code establishes it. When a public interface accepts constrained input,
-show or state its invalid-input behavior; CLI validation does not protect direct service callers.
+unless the request or code establishes it. A citation showing execution order is not evidence
+that the order is required: for example, rejecting a CLI value need not precede harmless object
+construction unless construction has relevant side effects. Tie the risk to the observable
+failure and its evidence. When a public interface accepts constrained input, show or state its
+invalid-input behavior; CLI validation does not protect direct service callers. Every selected
+contract needs verification, including permissive fallback behavior.
 
-**Why:** the second manual run invented a parser-order requirement and treated invalid service
-arguments as unreachable, despite exposing the service method as a reusable interface.
+**Why:** manual runs invented a parser-order requirement and treated invalid service arguments
+as unreachable. A later run defined a fallback alternative but wrongly said it needed no tests.
+Removing documentation as a decision also led to excluding it instead of doing it routinely.
 
 ## Workflows
 

@@ -1,6 +1,6 @@
 ---
 name: specshape-plan
-description: Plan a change before any code is written. Sizes the work, asks only the questions the code can't answer, and writes one code-grounded plan (decisions, change map, tasks or stories) to .specshape/<id>.md, revising it until the user approves. Never writes code. Use when the user wants to plan a ticket, spec, feature or new project, plan one story of an existing plan, or revise a plan.
+description: Plan a change before any code is written. Sizes the work, asks only the questions the code can't answer, and writes one code-grounded plan (decisions, change map, tasks or stories) under .specshape/, revising it until the user approves. Never writes code. Use when the user wants to plan a ticket, spec, feature or new project, plan one story of an existing plan, or revise a plan.
 ---
 
 # specshape-plan
@@ -19,7 +19,7 @@ The user reviews it, steers it, and approves it. Code is written later, one task
   repo's `AGENTS.md`.
 
 Nothing else. No source files, branches, commits, ticket comments, or commands that change state.
-If the user asks you to implement, point them to `/specshape-build <id> <task>`.
+If the user asks you to implement, follow the availability rule in step 7; never implement here.
 
 ## 0. Orient
 
@@ -60,7 +60,7 @@ place where the ticket and the code use different words for the same thing.
 
 Size the work with [sizing.md](sizing.md). **Open your reply with the size and the signals that
 decided it, then carry on.** Don't wait for confirmation; the user can override it at any point
-("treat as change").
+("treat as change"). An override changes the ask round and plan detail, not plan review or approval.
 
 **Tweak** → stop here. Say in 1–3 lines what to change and where, and that no plan is needed.
 Save nothing.
@@ -111,16 +111,21 @@ contracts or rules (see [context-format.md](context-format.md)).
 Rules:
 
 - **Evidence.** Every claim about existing code cites `path:line`. Anything you couldn't verify is
-  marked `assumption:`.
+  marked `assumption:`. Verify citations support the claim, including existing test coverage.
+  Never invent project history or past failures to justify a recommendation.
 - **Coarse, not detailed.** Code sketches show signatures, types and the lines that carry the idea,
   about 15 lines at most. The detailed sketch for each task comes in its preview, just before it's
   built.
-- **Decisions.** Number them D1, D2 … across the whole plan, stories included. Each has the options,
-  your recommendation, and the consequence in terms the user cares about ("the default is `true`,
+- **Decisions.** Include choices with meaningful alternatives affecting design or behavior.
+  Handle routine work (documenting a flag, following established validation conventions) directly
+  in the shape or tasks, unless it has a material trade-off. Number decisions D1, D2 … across the
+  whole plan, stories included. Each has the options, your recommendation, and the consequence in terms the user cares about ("the default is `true`,
   so ad-hoc runs with `groupBy` now fail"). Status: `open` until answered; `decided` when the user
   chose; `assumed` when the user approved without commenting on it.
 - **Tasks.** Each task leaves the build and the tests green, and names its files, the decisions it
-  carries out, the tasks it needs, and a **done-check**: a test or command that proves it works.
+  carries out, the tasks it needs, and a **done-check** that exercises its added or changed behavior.
+  Include relevant tests or verification in that task; an unchanged green suite alone does not
+  prove new behavior. Name what the check proves and how to run it. Proposed checks are not results.
 - **Stories.** Each is independently shippable as its own ticket and merge request, with a goal and
   acceptance criteria. Story ids are `<id>.<n>` until tickets exist. Never reuse a number.
 - **Use the glossary's words**, and none of the words it says not to use.
@@ -131,23 +136,26 @@ Rules:
 
 - [ ] every acceptance criterion is covered, or listed as out of scope
 - [ ] every file in the change map has a task, and every task's files are in the change map
-- [ ] every decision has options, a recommendation and a consequence
+- [ ] every decision has meaningful alternatives, a recommendation and a consequence
 - [ ] every claim about existing code has a `path:line` or an `assumption:` label
-- [ ] every task has a done-check; every story has a goal and acceptance criteria
+- [ ] every task has a done-check that proves its behavior; every story has a goal and acceptance criteria
 - [ ] no glossary term, contract or rule in the context is contradicted
-- [ ] `base_commit` is the current `HEAD` (when there's code)
+- [ ] `base_commit` is the current `HEAD`; if no commit is available, omit it and explain why
 
 ## 6. Show and review
 
 Show:
 
 - **always in full:** the summary and the open decisions, since that's what the user acts on
-- **Change, Feature:** the rest of the plan too
+- **Change, Feature:** the full plan body, including actual code sketches, change map, tasks and
+  done-checks. A summary, description of the shape, or link to the saved file is not a substitute
 - **Initiative, Project:** the stories as a list, then the path to the plan file for the rest
 
 End with what you need from the user:
 
-> Answer D1–D3, give feedback, or say **approved**.
+> Choose D1a or D1b, give feedback, or say **approved**.
+
+Use the actual open decision ids; with none, ask only for feedback or approval.
 
 On feedback:
 
@@ -158,7 +166,7 @@ On feedback:
 
 ## 7. On approval
 
-1. Set `status: approved` and `approved: <date>`, and refresh `base_commit`.
+1. Set `status: approved` and `approved: <date>`, and refresh `base_commit` if a commit exists.
 2. **Apply the Context changes** to `.specshape/context.md`, creating it if needed. If the repo already
    has a glossary, link to it and add only what's missing. Then empty the plan's Context changes
    section.
@@ -168,10 +176,11 @@ On feedback:
    user says yes, using whatever tracker access you have. Replace each local story id with its
    ticket key in the plan. If you have no tracker access, say so and keep the local ids.
 4. **First plan in this repo:** offer to add one line to `AGENTS.md`, and add it only after a yes:
-   "Read `.specshape/context.md` before working on this code. Plans live in `.specshape/`; for planned
-   work, use `/specshape-build`."
+   "Read `.specshape/context.md` before working on this code. Plans live in `.specshape/`."
+   Append "For planned work, use `/specshape-build`." only if that skill is available.
 5. Say what comes next:
-   - Change or Feature: `/specshape-build <id> T1`
+   - Change or Feature: `/specshape-build <id> T1` if that skill is available. Otherwise say the
+     plan is ready for implementation but `/specshape-build` is unavailable. Stop without writing code.
    - Initiative or Project: `/specshape-plan <first story id>`
 
 ## Planning a story

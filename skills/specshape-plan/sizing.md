@@ -38,5 +38,5 @@ Size: Feature
 - crosses 3 modules (downloader, DoFn, pipeline)
 - adds a public enum and a validator
 - ad-hoc runs with groupBy will now fail fast (behaviour change)
-(say "treat as change" to skip the questions)
+(say "treat as change" for no ask round and a shorter plan; review and approval still apply)
 ```

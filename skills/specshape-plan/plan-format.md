@@ -14,11 +14,14 @@ source: <ticket URL, spec path, or "conversation">
 size: initiative             # change | feature | initiative | project
 status: draft                # draft → approved → shipped
 version: 1
-base_commit: 3f9c2e1         # HEAD when the plan was last written; omit for a project with no code
+base_commit: 3f9c2e1         # HEAD when last written; omit if no commit is available
 approved:                    # date, set on approval
 tracker: PROJ-500            # the epic, once tickets exist
 ---
 ```
+
+For a repo with no commits, or no Git repository, omit `base_commit` and explain the missing
+baseline in the review response. Never invent a hash or create a commit to populate it.
 
 ## Sections, in this order
 
@@ -36,7 +39,7 @@ tracker: PROJ-500            # the epic, once tickets exist
 
 ## Decisions
 ### D1 <title> — open
-<the question, with the context needed to answer it>
+<a meaningful design or behavior choice, with evidence for its context>
 - **a)** <option>
 - **b)** <option>
 
@@ -63,8 +66,8 @@ tracker: PROJ-500            # the epic, once tickets exist
 | - | `path/Old.ext` | <why it goes> | |
 
 ## Tasks                     (Change, Feature)
-⬜ T1 <task>                                      done when: <test or command>
-⬜ T2 <task>                        needs T1      done when: <test or command>
+⬜ T1 <task, including relevant verification>    done when: <command> proves <task behavior>; suite green
+⬜ T2 <task, including relevant verification>    needs T1   done when: <command> proves <task behavior>; suite green
 
 | Task | Files | Decisions |
 |------|-------|-----------|
@@ -83,6 +86,14 @@ tracker: PROJ-500            # the epic, once tickets exist
 ## Alternatives rejected     (Feature and up)
 - **<alternative>:** <why not>
 ```
+
+Done-checks must cover the behavior introduced by their own task, not rely only on tests of
+unchanged behavior. Cite existing tests you build on, and label future checks as proposed until
+run. Routine documentation or validation choices need no decision entry unless a real trade-off
+needs review; use `—` in the task's Decisions column when none applies.
+
+For Change and Feature reviews, show the complete plan body above, including the sketches and
+task checks. Do not replace them with a prose summary or a link.
 
 ## A story once it's planned
 

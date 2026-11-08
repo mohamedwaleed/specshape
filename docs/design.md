@@ -78,7 +78,9 @@ Every run starts by sizing the work. The size decides how much process follows.
 
 ### D2 Grounded in code
 Every claim about existing code cites `path:line`. Anything not verified is marked `assumption:`.
-Facts are the agent's job; it never asks the user something it can look up.
+Facts are the agent's job; it never asks the user something it can look up. Citations must
+point to lines that support the claim, including claims about existing tests. Project history
+needs evidence too; never invent a past incident to justify a recommendation.
 
 **Why:** plans written from intent alone don't fit existing codebases (spec-kit's brownfield problem).
 
@@ -153,6 +155,9 @@ the ticket to done; if the user says "always", that goes into the rules in `cont
 ### D13 Tasks are marked done by their done-check
 Every task has a done-check (a test or command) and leaves the build green. `/specshape-build` marks
 the task done when its check passes, and shows that at the checkpoint.
+A planned done-check must exercise the behavior that task adds or changes; an existing green
+suite alone cannot prove behavior it never tests. Add relevant verification in the same task,
+and distinguish proposed checks from checks already run.
 
 ### D14 Changes during a preview become decisions
 If the user changes something in a task preview that affects other tasks, it's recorded as a new
@@ -165,8 +170,8 @@ must be planned again before building.
 ### D16 Read-only except `.specshape/`
 `/specshape-plan`, `/specshape-check` and `/specshape` write only under `.specshape/`. The one exception is a
 single line in the repo's `AGENTS.md`, added on the first run only if the user agrees: "Read
-`.specshape/context.md` before working on this code. Plans live in `.specshape/`; for planned work, use
-`/specshape-build`".
+`.specshape/context.md` before working on this code. Plans live in `.specshape/`." Append
+"For planned work, use `/specshape-build`." only when that skill is available (P9).
 
 ### D17 Agent-agnostic
 Skills are plain-markdown `SKILL.md` files and all state is plain files. No installer and no
@@ -177,7 +182,12 @@ per-agent adapters. The `AGENTS.md` line is how any agent finds Specshape.
 ### D18 Output
 Plans are saved as markdown and shown in the terminal; an HTML view may come later. Code sketches
 show signatures and key lines, not full diffs. Decisions are numbered and answered in free text.
-Each one gives the options, a recommendation and the consequence.
+Each one gives the options, a recommendation and the consequence. Reserve decisions for choices
+with meaningful alternatives affecting design or behavior; routine documentation and established
+validation conventions belong in the plan without a separate approval question.
+
+**Why:** the first manual status-filter run asked the user whether to document a new flag,
+adding ceremony without a useful design choice.
 
 ### D19 A project context file every agent reads first
 `.specshape/context.md` has three sections: **Glossary** (each term, its definition, the words not to
@@ -233,6 +243,8 @@ that story). Existing plans are checked first; an input that could mean two thin
 ### P2 No stop after sizing
 The reply always opens with the size and its reasons, then carries on. For a Change, size and plan
 come in one reply. For Feature and up, the ask round is the natural place to override the size.
+A size override changes the ask round and plan detail, not the requirement to review and approve
+the plan.
 
 ### P3 Ask rounds by size
 None for a Change; one round for a Feature (a second only if answers open new questions); rounds
@@ -248,6 +260,11 @@ says what to find, never which tool to use.
 ### P5 Terminal output
 The summary and open decisions always in full. Change and Feature: the rest of the plan too.
 Initiative and Project: the stories as a list, plus the path to the file.
+For Change and Feature, show the actual sketches, change map, tasks and done-checks, not a summary
+or a file link in their place. This also applies to a planned story's Change/Feature section.
+
+**Why:** the first manual run saved a design sketch but omitted it and the tasks from the review
+response, leaving the user to approve a summary instead of the visible design.
 
 ### P6 No plan history in the file
 `version: n` and a "Changed since v(n-1)" line. Git holds the history.
@@ -255,6 +272,20 @@ Initiative and Project: the stories as a list, plus the path to the file.
 ### P7 Commit `.specshape/`
 It's committed with the code it describes, so plans go through MR review and any machine or agent
 can pick up the work.
+
+### P8 Repository baseline
+Record the current `HEAD` as `base_commit`. If there is no commit (or no Git repository), omit
+it and explain that no commit baseline is available. Do not create a commit to fill the field.
+
+**Why:** the manual fixture had code but no commits; having code does not guarantee a `HEAD`.
+
+### P9 Available next steps
+Recommend `/specshape-build` only when it is available to the agent. Otherwise explain that
+building is the next stage but that command is unavailable; leave the approved plan ready for
+later implementation without writing code. The first-run `AGENTS.md` offer must likewise avoid
+directing agents to an unavailable command.
+
+**Why:** the first manual run directed the user to a command that has not been written yet.
 
 ## Workflows
 

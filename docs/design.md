@@ -157,7 +157,8 @@ Every task has a done-check (a test or command) and leaves the build green. `/sp
 the task done when its check passes, and shows that at the checkpoint.
 A planned done-check must exercise the behavior that task adds or changes; an existing green
 suite alone cannot prove behavior it never tests. Add relevant verification in the same task,
-and distinguish proposed checks from checks already run.
+and distinguish proposed checks from checks already run. Do not split a behavior's implementation
+and its verification into separate tasks; use behavior slices, each with its own checks (D25).
 
 ### D14 Changes during a preview become decisions
 If the user changes something in a task preview that affects other tasks, it's recorded as a new
@@ -170,7 +171,7 @@ must be planned again before building.
 ### D16 Read-only except `.specshape/`
 `/specshape-plan`, `/specshape-check` and `/specshape` write only under `.specshape/`. The one exception is a
 single line in the repo's `AGENTS.md`, added on the first run only if the user agrees: "Read
-`.specshape/context.md` before working on this code. Plans live in `.specshape/`." Append
+`.specshape/context.md` if it exists before working on this code. Plans live in `.specshape/`." Append
 "For planned work, use `/specshape-build`." only when that skill is available (P9).
 
 ### D17 Agent-agnostic
@@ -184,7 +185,9 @@ Plans are saved as markdown and shown in the terminal; an HTML view may come lat
 show signatures and key lines, not full diffs. Decisions are numbered and answered in free text.
 Each one gives the options, a recommendation and the consequence. Reserve decisions for choices
 with meaningful alternatives affecting design or behavior; routine documentation and established
-validation conventions belong in the plan without a separate approval question.
+validation conventions belong in the plan without a separate approval question. Using a parser's
+standard validation is routine unless error wording or validation ownership has a material
+trade-off. Recommend it directly rather than inventing an alternative just to fill a decision.
 
 **Why:** the first manual status-filter run asked the user whether to document a new flag,
 adding ceremony without a useful design choice.
@@ -234,6 +237,26 @@ Releases are git tags (`v0.1.0`) with a short `CHANGELOG.md`. Every plan records
 written in (`specshape: 0.1` in its frontmatter), so later commands can warn about a plan written in an
 older format.
 
+### D25 Plan behavior slices for red–green–refactor
+Behavior-changing tasks use TDD: one failing behavioral test, the minimum implementation to pass,
+then refactoring with tests green, repeated one behavior at a time. Refactoring stays within the
+approved scope and interfaces; a new design decision returns to the user.
+
+The plan names the public boundary under test, expected outcomes and verification commands.
+Plan approval confirms those test boundaries; it does not authorize implementation. Detailed test
+code and the cycles happen during build, not planning. At a build checkpoint, report observed red
+and green results and final checks; do not claim a cycle happened without running it.
+
+Each task includes tests and production files needed for its behavior, and finishes green. Never
+plan separate tasks for all tests and all implementation. Documentation-only work uses a relevant
+check rather than a contrived failing test. If a behavior cannot be tested automatically, explain
+the constraint and propose verification for review rather than silently claiming TDD.
+
+**Why:** the second manual run put implementation before its comprehensive tests. The user wants
+tests to drive implementation through red–green–refactor, while plans remain coarse and read-only.
+**Rejected:** writing all tests up front; making red, green and refactor separate tasks; requiring
+another test-boundary approval after those boundaries have already been approved in the plan.
+
 ## `/specshape-plan` decisions
 
 ### P1 Inputs
@@ -275,7 +298,9 @@ can pick up the work.
 
 ### P8 Repository baseline
 Record the current `HEAD` as `base_commit`. If there is no commit (or no Git repository), omit
-it and explain that no commit baseline is available. Do not create a commit to fill the field.
+it and explain that no commit baseline is available. Distinguish a Git repository with no commits
+from a directory outside Git; a failed `HEAD` lookup alone cannot establish which it is.
+Do not create a commit to fill the field.
 
 **Why:** the manual fixture had code but no commits; having code does not guarantee a `HEAD`.
 
@@ -286,6 +311,15 @@ later implementation without writing code. The first-run `AGENTS.md` offer must 
 directing agents to an unavailable command.
 
 **Why:** the first manual run directed the user to a command that has not been written yet.
+
+### P10 Risks and interface boundaries
+Rank risks by acceptance criteria and evidence, not incidental implementation preferences. Do not
+turn an implementation choice (such as validating before object construction) into a requirement
+unless the request or code establishes it. When a public interface accepts constrained input,
+show or state its invalid-input behavior; CLI validation does not protect direct service callers.
+
+**Why:** the second manual run invented a parser-order requirement and treated invalid service
+arguments as unreachable, despite exposing the service method as a reusable interface.
 
 ## Workflows
 

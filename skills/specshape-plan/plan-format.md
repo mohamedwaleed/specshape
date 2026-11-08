@@ -21,7 +21,8 @@ tracker: PROJ-500            # the epic, once tickets exist
 ```
 
 For a repo with no commits, or no Git repository, omit `base_commit` and explain the missing
-baseline in the review response. Never invent a hash or create a commit to populate it.
+baseline in the review response. Distinguish no Git repository from a repository with no commits;
+a failed `HEAD` lookup alone does not establish which it is. Never invent a hash or create a commit.
 
 ## Sections, in this order
 
@@ -35,7 +36,7 @@ baseline in the review response. Never invent a hash or create a commit to popul
 - **Size:** <size>: <the deciding signals>
 - **Footprint:** <n new, n changed, n removed files; n tasks>  or  <n stories>
 - **Decisions needed:** <n open> (D1–Dn)
-- **Top risk:** <the one thing most likely to go wrong or surprise someone>
+- **Top risk:** <the most consequential risk to requirements, supported by code or evidence>
 
 ## Decisions
 ### D1 <title> — open
@@ -66,8 +67,11 @@ baseline in the review response. Never invent a hash or create a commit to popul
 | - | `path/Old.ext` | <why it goes> | |
 
 ## Tasks                     (Change, Feature)
-⬜ T1 <task, including relevant verification>    done when: <command> proves <task behavior>; suite green
-⬜ T2 <task, including relevant verification>    needs T1   done when: <command> proves <task behavior>; suite green
+⬜ T1 <behavior slice: tests + implementation>    done when: <command> proves <outcomes>; suite green after refactor
+⬜ T2 <next behavior slice>    needs T1   done when: <command> proves <outcomes>; suite green after refactor
+
+**T1 test boundary:** <public interface>. **Behaviors:** <expected outcomes>.
+**Method:** one failing test → minimum implementation → refactor green; repeat per behavior.
 
 | Task | Files | Decisions |
 |------|-------|-----------|
@@ -87,9 +91,10 @@ baseline in the review response. Never invent a hash or create a commit to popul
 - **<alternative>:** <why not>
 ```
 
-Done-checks must cover the behavior introduced by their own task, not rely only on tests of
-unchanged behavior. Cite existing tests you build on, and label future checks as proposed until
-run. Routine documentation or validation choices need no decision entry unless a real trade-off
+Follow [testing.md](testing.md): each behavior task owns its tests and implementation, with a
+public test boundary, expected outcomes and verification command. Do not split tests into a
+later task. Done-checks must cover the task's behavior, not only unchanged behavior. Cite existing
+tests you build on, and label future checks as proposed until run. Routine documentation or validation choices need no decision entry unless a real trade-off
 needs review; use `—` in the task's Decisions column when none applies.
 
 For Change and Feature reviews, show the complete plan body above, including the sketches and
@@ -107,7 +112,7 @@ task checks. Do not replace them with a prose summary or a link.
 **Decisions:** D4 Store amounts as integer minor units — decided (full entry in Decisions)
 **Change map:** <table>
 
-⬜ PROJ-501/T1 Money value type                          done when: money.test.ts green
+⬜ PROJ-501/T1 Money value type + behavioral tests       done when: money.test.ts proves amount invariants; suite green after refactor
 ⬜ PROJ-501/T2 currency column + migration   needs T1    done when: migration up/down test green
 ```
 

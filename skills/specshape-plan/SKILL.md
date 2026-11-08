@@ -114,18 +114,23 @@ Rules:
   marked `assumption:`. Verify citations support the claim, including existing test coverage.
   Never invent project history or past failures to justify a recommendation.
 - **Coarse, not detailed.** Code sketches show signatures, types and the lines that carry the idea,
-  about 15 lines at most. The detailed sketch for each task comes in its preview, just before it's
-  built.
+  about 15 lines at most. State invalid-input behavior at public boundaries; a validated CLI
+  does not make invalid arguments unreachable for direct service callers. The detailed sketch
+  for each task comes in its preview, just before it's built.
 - **Decisions.** Include choices with meaningful alternatives affecting design or behavior.
   Handle routine work (documenting a flag, following established validation conventions) directly
-  in the shape or tasks, unless it has a material trade-off. Number decisions D1, D2 … across the
-  whole plan, stories included. Each has the options, your recommendation, and the consequence in terms the user cares about ("the default is `true`,
-  so ad-hoc runs with `groupBy` now fail"). Status: `open` until answered; `decided` when the user
+  in the shape or tasks, unless it has a material trade-off. Standard parser validation does
+  not need a decision merely because custom validation is possible. Number decisions D1, D2 … across the
+  whole plan, stories included. Each has the options, your recommendation, and a consequence
+  the user cares about ("the default is `true`, so ad-hoc runs with `groupBy` now fail"). Status: `open` until answered; `decided` when the user
   chose; `assumed` when the user approved without commenting on it.
 - **Tasks.** Each task leaves the build and the tests green, and names its files, the decisions it
   carries out, the tasks it needs, and a **done-check** that exercises its added or changed behavior.
-  Include relevant tests or verification in that task; an unchanged green suite alone does not
-  prove new behavior. Name what the check proves and how to run it. Proposed checks are not results.
+  Keep behavior and its tests in the same task; never defer verification to a later task.
+  Use [testing.md](testing.md) to plan red–green–refactor slices, their public test boundaries,
+  outcomes and commands. An unchanged green suite alone does not prove new behavior.
+- **Risks.** Prioritize acceptance criteria and evidence. Do not turn an incidental implementation
+  preference into a new requirement.
 - **Stories.** Each is independently shippable as its own ticket and merge request, with a goal and
   acceptance criteria. Story ids are `<id>.<n>` until tickets exist. Never reuse a number.
 - **Use the glossary's words**, and none of the words it says not to use.
@@ -138,7 +143,8 @@ Rules:
 - [ ] every file in the change map has a task, and every task's files are in the change map
 - [ ] every decision has meaningful alternatives, a recommendation and a consequence
 - [ ] every claim about existing code has a `path:line` or an `assumption:` label
-- [ ] every task has a done-check that proves its behavior; every story has a goal and acceptance criteria
+- [ ] every behavior task includes its tests, public test boundary and red–green–refactor checks;
+  every story has a goal and acceptance criteria
 - [ ] no glossary term, contract or rule in the context is contradicted
 - [ ] `base_commit` is the current `HEAD`; if no commit is available, omit it and explain why
 
@@ -176,7 +182,7 @@ On feedback:
    user says yes, using whatever tracker access you have. Replace each local story id with its
    ticket key in the plan. If you have no tracker access, say so and keep the local ids.
 4. **First plan in this repo:** offer to add one line to `AGENTS.md`, and add it only after a yes:
-   "Read `.specshape/context.md` before working on this code. Plans live in `.specshape/`."
+   "Read `.specshape/context.md` if it exists before working on this code. Plans live in `.specshape/`."
    Append "For planned work, use `/specshape-build`." only if that skill is available.
 5. Say what comes next:
    - Change or Feature: `/specshape-build <id> T1` if that skill is available. Otherwise say the

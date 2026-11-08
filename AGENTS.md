@@ -14,7 +14,7 @@ the plan afterwards. See the three pillars in `docs/design.md`.
 
 | File | What |
 |------|------|
-| `docs/design.md` | **Source of truth.** Every decision (D1–D24, P1–P9) with its reasons and the alternatives rejected, plus the workflows |
+| `docs/design.md` | **Source of truth.** Every decision (D1–D25, P1–P10) with its reasons and the alternatives rejected, plus the workflows |
 | `skills/specshape-plan/SKILL.md` | The only skill written so far, and its reference files next to it |
 
 ## Layout
@@ -29,7 +29,7 @@ skills/<command>/*.md       reference files the skill loads when needed
 
 | Command | State |
 |---------|-------|
-| `/specshape-plan` | Written. First manual fixture run reviewed; real-ticket trials pending |
+| `/specshape-plan` | Written. Two manual fixture runs reviewed; real-ticket trials pending |
 | `/specshape-build` | Designed (D4, D5, D13, D14), not written |
 | `/specshape-check` | Designed (D12, D20), not written |
 | `/specshape` (status) | Designed (D3), not written |

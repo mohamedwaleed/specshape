@@ -84,7 +84,10 @@ priorities, meanings, trade-offs the code can't settle.
 - **For a Project, the first round is about the glossary**: what each core term means and how terms
   relate ("What is an Account? Can a User belong to two?"), before stack or shape.
 - **When the ticket and the code use different words** for the same thing, ask which one is right.
-- **No real questions, no round.** Don't invent questions to fill one.
+- **No real questions, no round.** Don't invent questions to fill one. For Initiative/Project,
+  check whether answers leave material boundaries unresolved; a stack or hosting choice does
+  not settle exposure, registration or transport policy. Ask the dependent questions before
+  claiming discovery is complete (see [review.md](review.md)).
 - Choices visible in the plan itself (naming, which module owns what) aren't questions. They're
   **decisions** in the plan, defaulted to your recommendation.
 
@@ -128,7 +131,7 @@ Rules:
   Number decisions D1, D2 … across the whole plan, stories included. Each has the options, your
   recommendation, and a consequence the user cares about ("the default is `true`, so ad-hoc runs
   with `groupBy` now fail"). Status: `open` until answered; `decided` when the user chose;
-  `assumed` when the user approved without commenting on it.
+  `assumed` when the user approved without choosing. "Use all recommended" is an explicit choice.
 - **Tasks.** Each task leaves the build and the tests green, and names its files, the decisions it
   carries out, the tasks it needs, and a **done-check** that exercises its added or changed behavior.
   Keep behavior and its tests in the same task; never defer verification to a later task.
@@ -137,12 +140,14 @@ Rules:
 - **Risks.** Name the observable failure and evidence for its impact. A citation showing execution
   order does not make that order required; explain relevant side effects if order matters.
 - **Stories.** Each is independently shippable as its own ticket and merge request, with a goal and
-  acceptance criteria. Story ids are `<id>.<n>` until tickets exist. Never reuse a number.
+  acceptance criteria. Keep skeletons to the smallest useful end-to-end path, not all foundational
+  capabilities. Story ids are `<id>.<n>` until tickets exist. Never reuse a number.
 - **Use the glossary's words**, and none of the words it says not to use.
 - **Only write what someone will read again.** No section is there for completeness; write
   `n/a: <reason>` for one that doesn't apply rather than filling it.
 
-**Check before showing it.** Fix anything that fails:
+**Check before showing it.** For Initiative/Project, also read [review.md](review.md) and review
+cross-story consistency and assumptions. Recheck after feedback and before approval. Fix failures:
 
 - [ ] every acceptance criterion is covered, or listed as out of scope
 - [ ] every file in the change map has a task, and every task's files are in the change map
@@ -151,6 +156,7 @@ Rules:
 - [ ] every selected contract has verification, including permissive defaults or fallbacks
 - [ ] every behavior task includes its tests, public test boundary and red–green–refactor checks;
   every story has a goal and acceptance criteria
+- [ ] decisions, stories/tasks, context and out-of-scope claims agree on observable behavior
 - [ ] no glossary term, contract or rule in the context is contradicted
 - [ ] `base_commit` is the current `HEAD`; if no commit is available, omit it and explain why
 
@@ -178,7 +184,9 @@ On feedback:
 
 ## 7. On approval
 
-1. Set `status: approved` and `approved: <date>`, and refresh `base_commit` if a commit exists.
+1. Record explicit choices as `decided` and unchosen recommendations as `assumed`. Recheck the
+   plan's consistency, then set `status: approved` and `approved: <date>`, and refresh `base_commit`
+   if a commit exists. Bump the version when choices change the plan content.
 2. **Apply the Context changes** to `.specshape/context.md`, creating it if needed. If the repo already
    has a glossary, link to it and add only what's missing. Then empty the plan's Context changes
    section.
@@ -186,10 +194,13 @@ On feedback:
    children of the input ticket (the epic), or under a new epic for a project. Each holds the title,
    goal, acceptance criteria and a link to the plan, **not the tasks**. Create them only after the
    user says yes, using whatever tracker access you have. Replace each local story id with its
-   ticket key in the plan. If you have no tracker access, say so and keep the local ids.
+   ticket key in the plan. Check available tracker integrations and the input ticket source;
+   missing Git remotes do not prove missing tracker access. If access is unavailable, say so and
+   keep local ids. If only the destination is unknown, ask which tracker/project to use.
 4. **First plan in this repo:** offer to add one line to `AGENTS.md`, and add it only after a yes:
    "Read `.specshape/context.md` if it exists before working on this code. Plans live in `.specshape/`."
-   Append "For planned work, use `/specshape-build`." only if that skill is available.
+   Append "For planned work, use `/specshape-build`." only if that skill is available. Use the
+   same availability finding for this offer and the next step; check the proposed line before showing it.
 5. Say what comes next:
    - Change or Feature: `/specshape-build <id> T1` if that skill is available. Otherwise say the
      plan is ready for implementation but `/specshape-build` is unavailable. Stop without writing code.

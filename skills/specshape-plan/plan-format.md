@@ -102,6 +102,10 @@ public interfaces in the change map and tasks. Do not classify it as unrelated c
 For Change and Feature reviews, show the complete plan body above, including the sketches and
 task checks. Do not replace them with a prose summary or a link.
 
+For Initiative and Project plans, use [review.md](review.md) before showing or approving the plan.
+Check that decisions and story acceptance criteria agree, especially how modes are selected and
+which constraints came from user answers. A story's name must reflect its actual scope.
+
 ## A story once it's planned
 
 `/specshape-plan <story>` fills in the story under **Stories**:

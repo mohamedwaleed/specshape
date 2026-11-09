@@ -129,7 +129,10 @@ or check. The code is the record of the detail; the plan file is the record of t
 
 ### D9 Epic → story → task
 Big work is split into **stories**, each independently shippable as its own ticket and MR.
-Stories are split into tasks.
+Stories are split into tasks. A story must deliver a bounded, independently verifiable outcome.
+A walking skeleton is the smallest useful end-to-end path through the system; do not bundle
+all account, membership and administration work into it just because those are foundational.
+Larger foundations may be separate stories, with dependencies stated rather than hidden.
 
 **Why:** this is the hierarchy developers already know from their trackers.
 **Rejected:** slice (unfamiliar), increment (jargon), milestone (suggests a date).
@@ -139,7 +142,9 @@ On plan approval, Specshape lists the tickets it will create and waits for the u
 go under the input ticket (the epic); for a new project, under an epic it creates. A ticket holds
 the title, goal, acceptance criteria and a link to the plan, **not the tasks**, which change while
 building. Specshape uses whatever tracker access the agent already has. Without any, it keeps local
-ids and says so.
+ids and says so. Check connected tracker capabilities and the ticket source before concluding
+access is unavailable; Git remotes do not establish tracker access. If access exists but the
+tracker destination is unknown, ask where to create tickets, after presenting the proposed set.
 
 ### D11 Ids
 - A story's id is its ticket key (PROJ-501).
@@ -312,7 +317,8 @@ building is the next stage but that command is unavailable; leave the approved p
 later implementation without writing code. Closing summaries must match the saved plan's tasks
 and checks; do not add a manual check or requirement in the handoff. If a new check is needed,
 revise and review the plan before approval. The first-run `AGENTS.md` offer must likewise avoid
-directing agents to an unavailable command.
+directing agents to an unavailable command. Use the same availability finding for the next-step
+response and the proposed `AGENTS.md` line; validate both before offering them.
 
 **Why:** the first manual run directed the user to a command that has not been written yet.
 A later run also added a manual verification in its closing summary that the task did not specify.
@@ -330,6 +336,28 @@ contract needs verification, including permissive fallback behavior.
 **Why:** manual runs invented a parser-order requirement and treated invalid service arguments
 as unreachable. A later run defined a fallback alternative but wrongly said it needed no tests.
 Removing documentation as a decision also led to excluding it instead of doing it routinely.
+
+### P11 Review the plan as one design
+Before showing or approving a plan, compare its decisions, affected areas, stories, context and
+out-of-scope claims. They must describe the same observable behavior. For a system with multiple
+modes, show how a caller selects each mode and what happens with existing invocations. Do not
+defer contradictory behavior to story planning.
+
+Record what the user actually answered separately from derived assumptions. A hosting or stack
+choice does not settle network exposure, transport protection or registration policy. Ask another
+round when an answer leaves a material product boundary unresolved. A risk paragraph is not a
+substitute for that answer, nor permission to exclude required behavior. Recommendations must
+address viable alternatives honestly; distinguish a prerequisite from an implementation preference.
+
+Explicitly selecting options, including "use all recommended", marks them `decided`. Approval
+without choosing leaves recommended options `assumed`. Recheck consistency after choices change,
+and revise the version and changed-since line when the plan content changes.
+
+**Why:** the Initiative run contradicted its own CLI mode selection, inferred transport policy
+from self-hosting, and incorrectly treated open registration as necessary for member-led teams.
+It also overloaded a skeleton story and inferred missing tracker access from missing Git remotes.
+**Rejected:** accepting those conflicts because the headings and story structure were correct;
+adding tasks to resolve product contradictions later.
 
 ## Workflows
 

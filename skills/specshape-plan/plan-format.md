@@ -1,7 +1,8 @@
 # Plan format
 
 One file per piece of work: `.specshape/<id>.md`. Use only the sections the size calls for. Write
-`n/a: <reason>` for a section that's required but doesn't apply.
+`n/a: <reason>` for a section that's required but doesn't apply. Follow [presentation.md](presentation.md)
+for tables, dependency trees and useful Mermaid diagrams in both the saved plan and review output.
 
 ## Frontmatter
 
@@ -32,32 +33,40 @@ a failed `HEAD` lookup alone does not establish which it is. Never invent a hash
 > Changed since v<n-1>: <what changed, or "first version">
 
 ## Summary
-- **What changes:** <one or two lines, in the user's words>
-- **Size:** <size>: <the deciding signals>
-- **Footprint:** <n new, n changed, n removed files; n tasks>  or  <n stories>
-- **Decisions needed:** <n open> (D1–Dn)
-- **Top risk:** <the most consequential risk to requirements, supported by code or evidence>
+| Field | Value |
+|---|---|
+| What changes | <one or two lines in the user's words> |
+| Size | <size and deciding signals> |
+| Footprint | <new/changed/removed files and tasks, or stories> |
+| Decisions needed | <open count and ids> |
+| Top risk | <observable failure and evidence for its impact> |
 
 ## Decisions
 ### D1 <title> — open
 <a meaningful design or behavior choice, with evidence for its context>
-- **a)** <option>
-- **b)** <option>
+| Option | Approach | Consequence |
+|---|---|---|
+| a | <option> | <effect on users/callers/operations> |
+| b | <option> | <effect on users/callers/operations> |
 
 ➡️ **Recommended: a.** <why>
 ⚠ **Consequence:** <what changes for users, callers or operations>
 
 ## Context changes
-- **Glossary:** + **Money** — an amount in integer minor units plus an ISO currency code.
-- **Contract:** + C4 Prices are stored in the currency they were set in; never converted on write.
-- **Rule:** + No version numbers in class names.
+| Kind | Change | Canonical location |
+|---|---|---|
+| Glossary | + Money: integer minor units plus ISO currency | <existing glossary or context> |
+| Contract | + C4: never convert prices on write | .specshape/context.md |
+| Rule | + No version numbers in class names | .specshape/context.md |
 
 ## Shape                     (Feature, Project)
 <Feature: one block per component, what it is and why, citing the code it builds on, with a sketch.>
 <Project: folder tree, modules and their interfaces, data model, main flow diagram.>
 
 ## Affected areas            (Initiative)
-- <area>: <what changes there> (`path:line`)
+| Area | Change | Evidence |
+|---|---|---|
+| <area> | <what changes> | `path:line` |
 
 ## Change map                (Change, Feature)
 | | File | What | Size |
@@ -67,25 +76,39 @@ a failed `HEAD` lookup alone does not establish which it is. Never invent a hash
 | - | `path/Old.ext` | <why it goes> | |
 
 ## Tasks                     (Change, Feature)
-⬜ T1 <behavior slice: tests + implementation>    done when: <command> proves <outcomes>; suite green after refactor
-⬜ T2 <next behavior slice>    needs T1   done when: <command> proves <outcomes>; suite green after refactor
+| Task | Outcome | Files | Decisions | Needs |
+|---|---|---|---|---|
+| T1 | <behavior slice: tests + code> | `path/New.ext`, `path/NewTest.ext` | D1 | — |
+| T2 | <next behavior slice> | <files> | <ids or —> | T1 |
 
-**T1 test boundary:** <public interface>. **Behaviors:** <expected outcomes>.
-**Method:** one failing test → minimum implementation → refactor green; repeat per behavior.
+| Task | Public boundary | Expected outcomes | Command / done-check |
+|---|---|---|---|
+| T1 | <interface> | <specific behavior> | <command that proves it> |
+| T2 | <interface> | <specific behavior> | <command that proves it> |
 
-| Task | Files | Decisions |
-|------|-------|-----------|
-| T1 | `path/New.ext`, `path/NewTest.ext` | D1 |
+Method: one failing test → minimum implementation → refactor green; repeat per behavior.
+Regression check: <command>; each task ends green.
+
+<Dependency tree; use qualified story task ids when planning a story.>
 
 ## Stories                   (Initiative, Project)
+| Story | Goal | Acceptance summary | Needs | Planning state |
+|---|---|---|---|---|
+| PROJ-500.1 | <outcome> | <criteria> | — | not planned |
+
+<Dependency tree matching Needs; keep full goal/acceptance below if too long for cells.>
+
 ### PROJ-500.1 <title> — not planned
 **Goal:** <what's true when it ships>
 **Acceptance:** <criteria>
 **Needs:** <other stories, or none>
 
 ## Behaviour changes and risks
-- ⚠ <what changes for existing users, callers or operations>
-- **Out of scope:** <what this deliberately doesn't do>
+| Risk/change | Effect | Mitigation/check |
+|---|---|---|
+| <observable failure> | <effect on users/callers/operations> | <check> |
+
+**Out of scope:** <what this deliberately doesn't do>
 
 ## Alternatives rejected     (Feature and up)
 - **<alternative>:** <why not>
@@ -111,16 +134,21 @@ which constraints came from user answers. A story's name must reflect its actual
 `/specshape-plan <story>` fills in the story under **Stories**:
 
 ```markdown
-### PROJ-501 Money type + schema — planned
-**Goal:** … **Acceptance:** … **Needs:** none
+### PROJ-501 Money type + schema — not planned (awaiting approval)
+**Goal:** … **Acceptance:** … **Needs:** <story ids or none; note missing prerequisite code>
 
-**Shape:** <components and sketches, citing the code as it is now>
-**Decisions:** D4 Store amounts as integer minor units — decided (full entry in Decisions)
-**Change map:** <table>
-
-⬜ PROJ-501/T1 Money value type + behavioral tests       done when: money.test.ts proves amount invariants; suite green after refactor
-⬜ PROJ-501/T2 currency column + migration   needs T1    done when: migration up/down test green
+**Summary:** <field/value table>
+**New decisions:** <full open entries with option tables; not just ids>
+**Shape:** <components, sketches and useful flow diagrams, with evidence>
+**Change map:** <full file table>
+**Tasks:** <overview and per-task verification tables, as above; ids PROJ-501/T1, PROJ-501/T2>
+**Dependencies:** <task tree with those same qualified ids>
+**Context changes:** <canonical glossary/contract/rule table, if needed>
+**Revalidation before build:** <assumed prerequisite interfaces to check, if any>
 ```
+
+Until approval, expanded story details are labelled `awaiting approval` under the existing
+`not planned` state. Approval changes that state to `planned`.
 
 Story states: `not planned` → `planned` (→ `stale` when a plan decision changes before it's built).
 Workflow status (in progress, done) lives in the tracker, not here.

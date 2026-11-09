@@ -23,6 +23,10 @@ alternatives on their actual consequences rather than claiming one is impossible
 Keep recommendations open until resolved; approval alone marks unchosen recommendations assumed.
 An explicit "use all recommended" selects them and marks them decided.
 
+For lifecycle choices, explain expiry and revocation separately, including how a user or operator
+actually exercises them. Network trust does not justify an unlimited token lifetime by itself.
+Deleting a row is not a delivered revocation feature unless the operator workflow is planned.
+
 ## Check story boundaries
 
 Each story has a useful outcome, acceptance criteria and explicit dependencies. A walking skeleton
@@ -30,6 +34,12 @@ proves the smallest useful end-to-end path; it need not implement every administ
 If several independently reviewable outcomes are bundled as a "skeleton", split or accurately name
 the foundation and justify its scope. A story can depend on previous stories without being one
 unfinished layer of work. Keep tasks for later story planning.
+
+When expanding a story, reread its affected code or compare against a verified content baseline;
+status and file listings cannot prove unchanged contents. Check whether prerequisite stories
+exist in code. Planning ahead is allowed: state the assumed interfaces and revalidation needed
+before build, and preserve that qualification in next-step suggestions. Show all task details
+and new decisions during story review, following [presentation.md](presentation.md).
 
 ## Check offers against available capabilities
 

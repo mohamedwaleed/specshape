@@ -80,7 +80,9 @@ Every run starts by sizing the work. The size decides how much process follows.
 Every claim about existing code cites `path:line`. Anything not verified is marked `assumption:`.
 Facts are the agent's job; it never asks the user something it can look up. Citations must
 point to lines that support the claim, including claims about existing tests. Project history
-needs evidence too; never invent a past incident to justify a recommendation.
+needs evidence too; never invent a past incident to justify a recommendation. Git status and file
+listings alone do not establish that contents match an earlier survey, especially with untracked
+files or no commits. Reread affected files or compare their contents with a verified baseline.
 
 **Why:** plans written from intent alone don't fit existing codebases (spec-kit's brownfield problem).
 
@@ -217,7 +219,9 @@ things to forget.
 - A plan decision that makes something true project-wide moves into Contracts.
 - If the repo already has a glossary (`CONTEXT.md`, `docs/glossary.md`, ADRs), `context.md` links to
   it and adds only what's missing. Never two sources of truth for the same terms.
-- `context.md` is created only when a plan has something to put in it.
+- `context.md` is created only when a plan has something to put in it. When a story adds terms,
+  use the same canonical glossary as the parent plan; do not schedule a second definition in
+  project docs after applying it to context. Source glossary edits stay outside the plan skill.
 
 ### D21 Three ways to install, one copy of each skill
 - **Skills CLI:** `npx skills add <owner>/specshape`, the cross-agent installer (skills.sh). Our
@@ -289,7 +293,8 @@ says what to find, never which tool to use.
 
 ### P5 Terminal output
 The summary and open decisions always in full. Change and Feature: the rest of the plan too.
-Initiative and Project: the stories as a list, plus the path to the file.
+Initiative and Project: a story table with goals, acceptance summaries and dependencies, a
+dependency tree, plus the path to the file (P12).
 For Change and Feature, show the actual sketches, change map, tasks and done-checks, not a summary
 or a file link in their place. This also applies to a planned story's Change/Feature section.
 
@@ -348,6 +353,9 @@ choice does not settle network exposure, transport protection or registration po
 round when an answer leaves a material product boundary unresolved. A risk paragraph is not a
 substitute for that answer, nor permission to exclude required behavior. Recommendations must
 address viable alternatives honestly; distinguish a prerequisite from an implementation preference.
+For lifecycle choices, compare lifetime and expiry, revocation and the actual user/operator path
+for exercising them. A trusted network does not settle token lifetime; a possible database edit
+is not an implemented revocation feature.
 
 Explicitly selecting options, including "use all recommended", marks them `decided`. Approval
 without choosing leaves recommended options `assumed`. Recheck consistency after choices change,
@@ -358,6 +366,31 @@ from self-hosting, and incorrectly treated open registration as necessary for me
 It also overloaded a skeleton story and inferred missing tracker access from missing Git remotes.
 **Rejected:** accepting those conflicts because the headings and story structure were correct;
 adding tasks to resolve product contradictions later.
+
+### P12 Visible structure and story readiness
+Use Markdown tables for comparable material: summary fields, decision options, affected areas,
+change maps, story overviews, tasks and checks. Show story and task dependencies in a text tree;
+retain explicit dependency ids for multiple prerequisites. Use Mermaid for flows, interactions
+or dependency graphs when it conveys relationships beyond the tables; provide a text fallback
+when rendering is unavailable. Keep sketches and explanations outside table cells. Tweak stays
+brief. Presentation must expose the design and required checks, not replace them with decoration.
+
+A story review shows its summary, acceptance criteria, open decisions, shape, full change map,
+and all task rows with files, qualified ids, dependencies, test boundaries, behavioral checks and
+commands. A shared suite command alone is not a per-task done-check. The story becomes planned
+only on approval; do not hide new decisions elsewhere in the parent plan during review.
+
+Before planning or recommending another story, inspect its dependencies and available evidence.
+If prerequisite code is absent, make assumptions about its interfaces explicit. Planning ahead
+is allowed, but name what must be revalidated after those prerequisites are implemented and before
+building. Do not describe a dependent story as ready to build merely because it has a plan.
+
+**Why:** the first story run asserted unchanged code without content evidence, omitted its change
+map and task checks from review, and offered the next dependent story without explaining missing
+prerequisite code. The user requested tables, dependency trees and useful diagrams to make the
+review easier to inspect.
+**Rejected:** dense prose lists for comparable records; charts that add no information; forcing
+all stories to be built before any dependent story can be explored.
 
 ## Workflows
 

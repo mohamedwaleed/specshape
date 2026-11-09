@@ -55,7 +55,8 @@ How deep depends on the size, so do a quick pass first, size (step 3), then go a
 | Project | None: there's no code |
 
 Record `path:line` for every fact you'll rely on. Note the domain terms the code uses, and any
-place where the ticket and the code use different words for the same thing.
+place where the ticket and the code use different words for the same thing. Do not infer unchanged
+contents from Git status or file listings; reread affected files or compare a verified content baseline.
 
 ## 3. Size
 
@@ -143,6 +144,8 @@ Rules:
   acceptance criteria. Keep skeletons to the smallest useful end-to-end path, not all foundational
   capabilities. Story ids are `<id>.<n>` until tickets exist. Never reuse a number.
 - **Use the glossary's words**, and none of the words it says not to use.
+- **Presentation.** Follow [presentation.md](presentation.md): use tables for comparable records,
+  dependency trees for stories/tasks, and Mermaid where it explains flows or relationships.
 - **Only write what someone will read again.** No section is there for completeness; write
   `n/a: <reason>` for one that doesn't apply rather than filling it.
 
@@ -167,7 +170,11 @@ Show:
 - **always in full:** the summary and the open decisions, since that's what the user acts on
 - **Change, Feature:** the full plan body, including actual code sketches, change map, tasks and
   done-checks. A summary, description of the shape, or link to the saved file is not a substitute
-- **Initiative, Project:** the stories as a list, then the path to the plan file for the rest
+- **Initiative, Project:** the story overview table with dependencies and dependency tree, then
+  the path to the plan file for the rest
+- **Planned story review:** its summary, acceptance, open decisions, shape, complete change map,
+  task tables and dependency tree. Show every task's files, boundary, outcomes and check command;
+  a shared suite command or prose task list is not a substitute
 
 End with what you need from the user:
 
@@ -188,7 +195,8 @@ On feedback:
    plan's consistency, then set `status: approved` and `approved: <date>`, and refresh `base_commit`
    if a commit exists. Bump the version when choices change the plan content.
 2. **Apply the Context changes** to `.specshape/context.md`, creating it if needed. If the repo already
-   has a glossary, link to it and add only what's missing. Then empty the plan's Context changes
+   has a glossary, link to it and add only what's missing; use the parent's canonical glossary
+   when planning a story. Do not also schedule duplicate definitions in project docs. Then empty the plan's Context changes
    section.
 3. **Initiative or Project: offer the tickets.** List the tickets you'll create: one per story, as
    children of the input ticket (the epic), or under a new epic for a project. Each holds the title,
@@ -204,7 +212,9 @@ On feedback:
 5. Say what comes next:
    - Change or Feature: `/specshape-build <id> T1` if that skill is available. Otherwise say the
      plan is ready for implementation but `/specshape-build` is unavailable. Stop without writing code.
-   - Initiative or Project: `/specshape-plan <first story id>`
+   - Initiative or Project: `/specshape-plan <first story id>`. Before suggesting another story,
+     check its prerequisites; if unbuilt, explain that planning ahead will rely on assumptions
+     and must be revalidated against the implemented interfaces before build
    Keep the handoff faithful to the saved task definitions and done-checks. Do not append new
    manual checks or requirements; revise and review the plan first if another check is needed.
 
@@ -213,13 +223,17 @@ On feedback:
 Input: a story id from an approved plan.
 
 1. If the parent plan isn't approved, say so and stop.
-2. Survey the code that story touches, as it is now: the full survey for a Change or Feature. For a
-   project's walking skeleton, there's no code yet, so ground it in the plan's decisions and shape.
+2. Read the story's dependencies and survey its affected code in full, as it is now. If prerequisite
+   code is absent, label the assumed interfaces and name what must be revalidated before build.
+   For a project's walking skeleton, ground it in the parent's decisions and shape. Do not infer
+   unchanged code from status or file listings. Apply [review.md](review.md) to new boundary choices.
 3. Ask, if the story raises questions only the user can answer (Feature rules).
 4. Fill in the story's section in the plan: its shape, new decisions (numbered on from the plan's
-   last one), change map, tasks (`<story>/T1` …), and any context changes.
-5. Run the checks, show the story's section, and review it as in steps 6–7 (version bump, context
-   changes applied on approval). The story's state becomes `planned`.
+   last one), change map, tasks (`<story>/T1` … everywhere, including tables and trees), and any
+   context changes. Each task names its own files, test boundary, outcomes and check command.
+5. Run the plan checks, show the complete story review from step 6, and review it as in steps 6–7
+   (version bump, context changes applied on approval). The story becomes `planned` on approval,
+   not when its draft is first written.
 
 ## Revising a plan
 

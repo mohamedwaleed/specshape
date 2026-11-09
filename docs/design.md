@@ -68,7 +68,7 @@ Every run starts by sizing the work. The size decides how much process follows.
 
 | Size | When | What Specshape does |
 |------|------|------|
-| Tweak | 1–2 files, no new interface, no behaviour change, nothing to decide | Says what to change. No plan. |
+| Tweak | 1–2 files, no new interface, no behaviour change, nothing to decide | Says what to change and directs the user to ask their agent to make the edit directly. No plan. |
 | Change | One module, a handful of files, at most 2 decisions | Plan with a flat task list. No ask round. |
 | Feature | Crosses modules, new interface, schema or contract change, behaviour change, or 3+ decisions; fits one session | Ask round, plan with design shape and tasks |
 | Initiative | More than one session, or parts that ship separately | Ask round, plan with stories; each story planned when reached |
@@ -343,7 +343,13 @@ Removing documentation as a decision also led to excluding it instead of doing i
 ```
 
 Saved: `.specshape/PROJ-612.md`, then a checkpoint line per task, then the check result.
-A Tweak stops at sizing and saves nothing.
+A Tweak stops at sizing and saves nothing. End its response with an explicit handoff: ask the
+agent to make the edit directly, or say "fix it" to continue outside Specshape. The planning run
+ends without code changes; a later implementation request is handled as ordinary agent work,
+without requiring `/specshape-build`.
+
+**Why:** the manual Tweak run correctly skipped a plan but gave no next step. Small work should
+return to direct implementation rather than leave the user at a dead end.
 
 ### Big feature (Initiative)
 

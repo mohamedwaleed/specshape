@@ -19,7 +19,8 @@ The user reviews it, steers it, and approves it. Code is written later, one task
   repo's `AGENTS.md`.
 
 Nothing else. No source files, branches, commits, ticket comments, or commands that change state.
-If the user asks you to implement, follow the availability rule in step 7; never implement here.
+If the user asks you to implement planned work, follow the availability rule in step 7; never
+implement here. A Tweak ends this skill and hands off to ordinary agent work (step 3).
 
 ## 0. Orient
 
@@ -63,7 +64,9 @@ decided it, then carry on.** Don't wait for confirmation; the user can override 
 ("treat as change"). An override changes the ask round and plan detail, not plan review or approval.
 
 **Tweak** → stop here. Say in 1–3 lines what to change and where, and that no plan is needed.
-Save nothing.
+End with: "Ask your agent to make this edit directly, or say ‘fix it’ here to continue outside
+Specshape." Save nothing and make no source changes. A later request to fix it is ordinary agent
+work outside this skill; it does not need `/specshape-build`.
 
 ## 4. Ask
 
